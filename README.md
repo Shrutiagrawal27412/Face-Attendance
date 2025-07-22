@@ -1,107 +1,53 @@
-👩‍🏫 Face Recognition Attendance System
-This project is a simple face recognition-based attendance system built using Python, OpenCV, and LBPH Face Recognizer. It enables capturing face images for dataset creation and then recognizes faces in real-time to mark attendance.
+# Face Recognition Attendance System
 
-📸 Features
-📷 Face Dataset Creation: Captures and saves 50 grayscale face images per user in the dataset/ folder.
+A Python-based attendance system using [OpenCV](https://opencv.org/) for face detection and recognition. It captures facial data, trains a recognizer, and identifies known users in real time, logging attendance locally via Excel.
 
+---
 
-🧠 Face Recognition: Uses LBPH (Local Binary Pattern Histogram) to recognize known faces from a trained model.
+## 🔍 Description
 
+This system uses a webcam to register faces and recognize them using OpenCV’s [LBPHFaceRecognizer](https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html). Each recognized face is mapped to a name and ID, which is logged in a local Excel file through a custom module. Unknown faces are flagged and blocked after multiple failed attempts. Audio feedback is provided for successful recognition.
 
-📋 Attendance Logging: Logs the recognized user's attendance to a local Excel sheet using xlwrite.
+* [`Create_dataset.py`](./Create_dataset.py): Captures and stores 50 grayscale images per user using Haar cascades.
+* [`Recognise.py`](./Recognise.py): Loads a trained LBPH model to recognize and log users in real-time with audio feedback.
 
+---
 
-🔒 Security Feature: Unrecognized faces are flagged and blocked after multiple attempts.
+## 🧠 Techniques Used
 
+* **Face detection with Haar Cascades** using [`cv2.CascadeClassifier`](https://docs.opencv.org/4.x/d7/d8b/tutorial_py_face_detection.html) for lightweight, fast face localization.
+* **Face recognition with LBPH** via `cv2.face.LBPHFaceRecognizer_create()`, suited for real-time applications with limited datasets.
+* **Excel file writing** using a custom `xlwrite.py` module for attendance tracking.
+* **Video streaming** and frame analysis via [`cv2.VideoCapture`](https://docs.opencv.org/4.x/dd/d43/tutorial_py_video_display.html).
+* **Real-time rectangle overlay** using `cv2.rectangle()` to visually tag faces in the stream.
+* **Audio playback** through [`playsound`](https://pypi.org/project/playsound/) for basic user feedback.
 
-🔊 Audio Feedback: Plays a welcome sound for valid users.
+---
 
+## 📦 Libraries and Tools
 
+* [`opencv-contrib-python`](https://pypi.org/project/opencv-contrib-python/): Required for `cv2.face` module (LBPH).
+* [`playsound`](https://pypi.org/project/playsound/): Cross-platform audio player for simple sound notifications.
+* [`firebase-admin`](https://pypi.org/project/firebase-admin/) *(optional)*: Intended for future integration with Firebase backend.
+* Custom `xlwrite.py`: Handles Excel-based attendance logging.
 
-🛠 Requirements
-Python 3.x
+---
 
+## 📁 Project Structure
 
-OpenCV with contrib modules (opencv-contrib-python)
+```
+.
+├── Create_dataset.py
+├── Recognise.py
+├── xlwrite.py
+├── dataset/
+├── trainer/
+├── haarcascade_frontalface_default.xml
+├── Welcome.mp3
+```
 
-
-playsound
-
-
-firebase-admin (optional, for future Firebase integration)
-
-
-xlwrite.py (your custom module for Excel logging)
-
-
-Install dependencies:
-pip install opencv-contrib-python playsound firebase-admin
-
-
-📁 Folder Structure
-
-├── Create_dataset.py          # Script to capture and save face images
-├── Recognise.py               # Script to recognize and mark attendance
-├── dataset/                   # Saved face images
-├── trainer/                   # Trained face model (trainer.yml)
-├── haarcascade_frontalface_default.xml  # Haar cascade for face detection
-├── Welcome.mp3                # Welcome audio for recognized users
-├── xlwrite.py                 # Excel logging module
-
-
-🚀 How It Works
-1. Create Dataset (Face Capture)
-Run the script to capture images for a new user:
-Create_dataset.py
-
-Prompts you to enter a user ID
-
-
-Captures 50 face images using your webcam
-
-
-Saves them in the dataset/ directory
-
-
-2. Train the Recognizer
-⚠️ Note: Training code isn't shown here but you should use OpenCV’s LBPHFaceRecognizer to train on the dataset and save the model to trainer/trainer.yml.
-3. Recognize Faces & Mark Attendance
-
-Recognise.py
-
-Starts webcam
-
-
-Recognizes faces using the trained model
-
-
-Displays name and confidence score
-
-
-Calls xlwrite.output() to mark attendance
-
-
-Flags unknown faces and plays audio for valid users
-
-
-
-🧠 Technologies Used
-OpenCV (LBPH Face Recognizer, Haar Cascades)
-
-
-Python (cv2, os, time, playsound)
-
-
-Excel Writing (via xlwrite.py)
-
-
-Firebase (optional setup shown in comments)
-
-
-
-🤝 Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-📄 License
-This project is open-source and available under the MIT License.
-
+* `dataset/`: Stores 50 grayscale face images per user (named by ID).
+* `trainer/`: Contains the trained LBPH face model (`trainer.yml`).
+* `haarcascade_frontalface_default.xml`: Pre-trained Haar cascade classifier from OpenCV.
+* `Welcome.mp3`: Sound file used for recognized users.
+* `xlwrite.py`: A custom Python module for writing attendance logs to Excel.
